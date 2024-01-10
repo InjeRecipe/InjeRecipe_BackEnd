@@ -10,7 +10,7 @@ public class MemberProfile {
     private String name;
     private String email;
     private String provider;
-    private String nickname;
+    private String picture;
 
     public Member toMember(){
         return Member.builder()
