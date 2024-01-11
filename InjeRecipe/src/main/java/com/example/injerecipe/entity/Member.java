@@ -1,18 +1,19 @@
 package com.example.injerecipe.entity;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.injerecipe.dto.Role;
+import com.example.injerecipe.dto.SocialType;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
 @Getter
 @Builder
 @Document(collection = "member")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Member {
     @Id
     private String id;
@@ -21,9 +22,45 @@ public class Member {
 
     private String email;
 
+    private String password;
+
     private String provider;
 
     private String nickname;
+
+    private String refreshToken;
+
+    private int age;
+
+    private Role role;
+
+    private SocialType socialType;
+
+    private String socialId;
+
+    private String imageUrl;
+
+    public void authorizeUser() {
+        this.role = Role.USER;
+    }
+
+    public void passwordEncode(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
+
+    public void updateNickname(String updateNickname) {
+        this.nickname = updateNickname;
+    }
+
+    public void updateAge(int updateAge) {
+        this.age = updateAge;
+    }
+
+
+    public void updatePassword(String updatePassword, PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(updatePassword);
+    }
+
 
 
     public Member(String id, String name, String email, String provider, String nickname){
@@ -47,6 +84,11 @@ public class Member {
     public Member update(String name, String email){
         this.name = name;
         this.email = email;
+        return this;
+    }
+
+    public Member updateRefreshToken(String refreshToken){
+        this.refreshToken = refreshToken;
         return this;
     }
 

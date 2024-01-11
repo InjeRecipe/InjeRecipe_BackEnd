@@ -1,46 +1,63 @@
 package com.example.injerecipe.security;
 
-import com.example.injerecipe.auth.handler.MyAuthenticationSuccessHandler;
-import com.example.injerecipe.auth.service.OAuthService;
+import com.example.injerecipe.filter.CustomJsonUsernamePasswordAuthenticationFilter;
+import com.example.injerecipe.handler.LoginFailureHandler;
+import com.example.injerecipe.handler.LoginSuccessHandler;
+import com.example.injerecipe.oauth2.handler.MyAuthenticationFailureHandler;
+import com.example.injerecipe.oauth2.handler.MyAuthenticationSuccessHandler;
+import com.example.injerecipe.repository.MemberRepository;
+import com.example.injerecipe.service.JwtService;
+import com.example.injerecipe.service.LoginService;
+import com.example.injerecipe.service.OAuthService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.web.authentication.logout.LogoutFilter;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
 
+    private final LoginService loginService;
+    private final JwtService jwtService;
+    private final MemberRepository memberRepository;
+    private final ObjectMapper objectMapper;
+    private final MyAuthenticationSuccessHandler myAuthenticationSuccessHandler;
+    private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
     private final OAuthService oAuthService;
-    private final JwtTokenProvider jwtTokenProvider;
-
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .formLogin().disable() // FormLogin 사용 X
+                .httpBasic().disable() // httpBasic 사용 X
+                .csrf().disable() // csrf 보안 사용 X
+                .headers().frameOptions().disable()
+                .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
+                .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**", "/sign-up").permitAll()
                 .anyRequest().permitAll()
                 .and()
-                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
                 .oauth2Login()
-                .successHandler(new MyAuthenticationSuccessHandler(jwtTokenProvider))
-                .userInfoEndpoint()
-                .userService(oAuthService)
-                .and();
+                .successHandler(myAuthenticationSuccessHandler)
+                .failureHandler(myAuthenticationFailureHandler)
+                .userInfoEndpoint().userService(oAuthService);
+
+        http.addFilterAfter(customJsonUsernamePasswordAuthenticationFilter(), LogoutFilter.class);
+        http.addFilterBefore(jwtAuthenticationProcessingFilter(), CustomJsonUsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -51,15 +68,38 @@ public class SecurityConfig {
     }
 
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000");
-        configuration.addAllowedMethod("*");
-        configuration.addAllowedHeader("*");
-        configuration.setAllowCredentials(true);
+    public AuthenticationManager authenticationManager() {
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setPasswordEncoder(passwordEncoder());
+        provider.setUserDetailsService(loginService);
+        return new ProviderManager(provider);
+    }
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    @Bean
+    public LoginSuccessHandler loginSuccessHandler() {
+        return new LoginSuccessHandler(jwtService, memberRepository);
+    }
+
+    @Bean
+    public LoginFailureHandler loginFailureHandler() {
+        return new LoginFailureHandler();
+    }
+
+
+    @Bean
+    public CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordAuthenticationFilter() {
+        CustomJsonUsernamePasswordAuthenticationFilter customJsonUsernamePasswordLoginFilter
+                = new CustomJsonUsernamePasswordAuthenticationFilter(objectMapper);
+        customJsonUsernamePasswordLoginFilter.setAuthenticationManager(authenticationManager());
+        customJsonUsernamePasswordLoginFilter.setAuthenticationSuccessHandler(loginSuccessHandler());
+        customJsonUsernamePasswordLoginFilter.setAuthenticationFailureHandler(loginFailureHandler());
+        return customJsonUsernamePasswordLoginFilter;
+    }
+
+    @Bean
+    public com.example.injerecipe.security.JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
+        com.example.injerecipe.security.JwtAuthenticationProcessingFilter jwtAuthenticationFilter =
+                new com.example.injerecipe.security.JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+        return jwtAuthenticationFilter;
     }
 }
