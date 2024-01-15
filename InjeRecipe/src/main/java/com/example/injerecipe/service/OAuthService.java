@@ -24,6 +24,9 @@ import java.util.Map;
 public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2User> {
 
     private final MemberRepository memberRepository;
+
+    private static final String NAVER = "naver";
+    private static final String KAKAO = "kakao";
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         log.info("CustomOAuth2UserService.loadUser() 실행 - OAuth2 로그인 요청 진입");
@@ -51,6 +54,12 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
     }
 
     private SocialType getSocialType(String registrationId) {
+        if(NAVER.equals(registrationId)) {
+            return SocialType.NAVER;
+        }
+        if(KAKAO.equals(registrationId)) {
+            return SocialType.KAKAO;
+        }
         return SocialType.GOOGLE;
     }
 
