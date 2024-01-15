@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**", "/sign-up").permitAll()
-                .anyRequest().permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
                 .successHandler(myAuthenticationSuccessHandler)
