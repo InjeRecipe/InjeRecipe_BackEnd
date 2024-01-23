@@ -3,6 +3,7 @@ package com.example.injerecipe.security;
 import com.example.injerecipe.filter.CustomJsonUsernamePasswordAuthenticationFilter;
 import com.example.injerecipe.handler.LoginFailureHandler;
 import com.example.injerecipe.handler.LoginSuccessHandler;
+import com.example.injerecipe.jwt.JwtAuthenticationProcessingFilter;
 import com.example.injerecipe.oauth2.handler.MyAuthenticationFailureHandler;
 import com.example.injerecipe.oauth2.handler.MyAuthenticationSuccessHandler;
 import com.example.injerecipe.repository.MemberRepository;
@@ -37,6 +38,21 @@ public class SecurityConfig {
     private final MyAuthenticationFailureHandler myAuthenticationFailureHandler;
     private final OAuthService oAuthService;
 
+    private static final String[] PERMIT_URL_ARRAY = {
+            /* swagger v2 */
+            "/v2/api-docs",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui.html",
+            "/webjars/**",
+            /* swagger v3 */
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/weather/create/diary"
+    };
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -48,7 +64,7 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/","/css/**","/images/**","/js/**","/favicon.ico","/h2-console/**", "/sign-up").permitAll()
+                .requestMatchers(PERMIT_URL_ARRAY).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .oauth2Login()
@@ -97,9 +113,9 @@ public class SecurityConfig {
     }
 
     @Bean
-    public com.example.injerecipe.security.JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        com.example.injerecipe.security.JwtAuthenticationProcessingFilter jwtAuthenticationFilter =
-                new com.example.injerecipe.security.JwtAuthenticationProcessingFilter(jwtService, memberRepository);
+    public JwtAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
+        JwtAuthenticationProcessingFilter jwtAuthenticationFilter =
+                new JwtAuthenticationProcessingFilter(jwtService, memberRepository);
         return jwtAuthenticationFilter;
     }
 }
