@@ -46,6 +46,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
     implementation 'com.auth0:java-jwt:4.2.1'
 
+    // Json
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
 
 
 }

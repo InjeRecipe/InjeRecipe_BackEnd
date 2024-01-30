@@ -1,4 +1,4 @@
-package com.example.injerecipe.security;
+package com.example.injerecipe.jwt;
 
 import com.example.injerecipe.entity.Member;
 import com.example.injerecipe.jwt.PasswordUtil;

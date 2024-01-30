@@ -14,16 +14,12 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @Slf4j
 @RequiredArgsConstructor
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
-
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
-
     @Value("${jwt.access.expiration}")
     private String accessTokenExpiration;
-
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-                                        Authentication authentication) {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String email = extractUsername(authentication);
         String accessToken = jwtService.createAccessToken(email);
         String refreshToken = jwtService.createRefreshToken();
