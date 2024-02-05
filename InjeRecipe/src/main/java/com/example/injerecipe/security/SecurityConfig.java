@@ -50,7 +50,10 @@ public class SecurityConfig {
             /* swagger v3 */
             "/v3/api-docs/**",
             "/swagger-ui/**",
-            "/weather/create/diary"
+            "/weather/get",
+            "/openai/chat",
+            "/upload",
+            "/oauth/signUp"
     };
 
     @Bean

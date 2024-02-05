@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class WeatherController {
     private final WeatherService weatherService;
-
     @PostMapping("/get")
     void getWeather(@RequestParam String lat, @RequestParam String lon){
         weatherService.getWeatherString(lat, lon);

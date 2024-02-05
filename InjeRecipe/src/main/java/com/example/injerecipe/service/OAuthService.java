@@ -78,4 +78,7 @@ public class OAuthService implements OAuth2UserService<OAuth2UserRequest, OAuth2
         return memberRepository.save(createdUser);
     }
 
+    public Member saverUser(Member member){
+        return memberRepository.save(member);
+    }
 }
