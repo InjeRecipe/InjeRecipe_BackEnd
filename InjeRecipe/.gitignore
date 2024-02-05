@@ -1,5 +1,5 @@
 application-oauth.properties
-application-weather.properties
+application-API-KEY.properties
 HELP.md
 .gradle
 build/
