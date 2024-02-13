@@ -54,7 +54,9 @@ public class SecurityConfig {
             "/openai/chat",
             "/upload",
             "/oauth/signUp",
-            "/api/*"
+            "/api/*",
+            "/register",
+            "/signUp"
     };
 
     @Bean
