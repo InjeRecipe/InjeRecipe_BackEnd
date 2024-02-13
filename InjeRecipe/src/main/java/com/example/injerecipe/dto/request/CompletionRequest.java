@@ -1,4 +1,4 @@
-package com.example.injerecipe.dto;
+package com.example.injerecipe.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CompletionRequestDto {
+public class CompletionRequest {
     private String model;
 
     private String prompt;
@@ -15,7 +15,7 @@ public class CompletionRequestDto {
     private float temperature;
 
     @Builder
-    CompletionRequestDto(String model, String prompt, float temperature){
+    CompletionRequest(String model, String prompt, float temperature){
         this.model = model;
         this.prompt = prompt;
         this.temperature = temperature;
