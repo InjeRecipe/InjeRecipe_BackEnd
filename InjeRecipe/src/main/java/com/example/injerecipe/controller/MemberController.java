@@ -10,8 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-
-public class UserController {
+public class MemberController {
     private final UserService userService;
 
     @PostMapping("/sign-up")
@@ -24,4 +23,5 @@ public class UserController {
     public String jwtTest() {
         return "jwtTest 요청 성공";
     }
+
 }
