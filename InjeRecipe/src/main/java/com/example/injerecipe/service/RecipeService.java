@@ -18,6 +18,9 @@ public class RecipeService {
     @Value("${openApi.serviceKey}")
     private String serviceKey;
 
+    @Value("${openApi.recipe.serviceKey}")
+    private String recipeServiceKey;
+
     @Value("${openApi.dataType}")
     private String dataType;
 
@@ -27,8 +30,39 @@ public class RecipeService {
     @Value("${openApi.step.apiUrl}")
     private String stepUrl;
 
-    @Value("${openApi.ing.apiUrl}")
+    @Value("${openApi.irdnt.apiUrl}")
     private String ingredientUrl;
+
+
+    public String getRecipe(int start, int end) {
+        HttpURLConnection urlConnection = null;
+        InputStream stream = null;
+        String result = null;
+
+        String urlStr = "http://openapi.foodsafetykorea.go.kr/api" +
+                "/" + recipeServiceKey +
+                "/COOKRCP01" +
+                "/" + dataType +
+                "/" + start +
+                "/" + end;
+
+        try {
+            URL url = new URL(urlStr);
+
+            urlConnection = (HttpURLConnection) url.openConnection();
+            stream = getNetworkConnection(urlConnection);
+            result = readStreamToString(stream);
+
+            if (stream != null) stream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+        }
+        return result;
+    }
 
     public String getIngredients(int start, int end) {
         HttpURLConnection urlConnection = null;

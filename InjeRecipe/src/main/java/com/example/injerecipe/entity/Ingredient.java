@@ -1,5 +1,16 @@
 package com.example.injerecipe.entity;
 
-public class Ingredient {
+import org.springframework.data.mongodb.core.mapping.DBRef;
 
+public class Ingredient {
+    private String irdntNm;
+
+    private String irdntCpcty;
+
+    private String irdntTyCode;
+
+    private String irdntTyNm;
+
+    @DBRef
+    private Recipe recipe;
 }

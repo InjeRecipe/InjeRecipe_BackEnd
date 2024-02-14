@@ -1,7 +1,9 @@
 package com.example.injerecipe.controller;
 
+import com.example.injerecipe.dto.ApiResponse;
 import com.example.injerecipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Tag(name = "레시피 API")
 @RestController
 @RequestMapping("api")
 @RequiredArgsConstructor
@@ -48,9 +51,10 @@ public class RecipeController {
         return new ResponseEntity<>(recipeService.getRecipes(start, end), HttpStatus.OK);
     }
 
-
-
-
-
+    @Operation(summary = "레시피 종합정보")
+    @GetMapping("/recipe")
+    public ApiResponse searchRecipe(@RequestParam int start, @RequestParam int end){
+        return ApiResponse.success(recipeService.getRecipe(start, end));
+    }
 
 }
