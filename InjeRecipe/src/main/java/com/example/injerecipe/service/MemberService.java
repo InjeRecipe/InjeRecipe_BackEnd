@@ -2,6 +2,7 @@ package com.example.injerecipe.service;
 
 import com.example.injerecipe.dto.Role;
 import com.example.injerecipe.dto.request.MemberSignUpRequest;
+import com.example.injerecipe.dto.response.MemberSignUpResponse;
 import com.example.injerecipe.entity.Member;
 import com.example.injerecipe.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void signUp(MemberSignUpRequest request)throws Exception{
+    public MemberSignUpResponse signUp(MemberSignUpRequest request)throws Exception{
         if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
             throw new Exception("이미 존재하는 이메일입니다.");
         }
@@ -37,5 +38,6 @@ public class MemberService {
 
         member.passwordEncode(passwordEncoder);
         memberRepository.save(member);
+        return MemberSignUpResponse.from(member);
     }
 }

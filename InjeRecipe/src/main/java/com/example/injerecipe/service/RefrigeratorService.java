@@ -16,7 +16,7 @@ public class RefrigeratorService {
     private final RefrigeratorRepository refrigeratorRepository;
     private final MemberRepository memberRepository;
 
-    public RefrigeratorResponse saveIngredients(RefrigeratorRequest request, String account){
+    public RefrigeratorResponse saveIngredients(RefrigeratorRequest request, Long account){
         Member member = memberRepository.findById(account).orElseThrow(() -> new UsernameNotFoundException("계정이 존재하지 않습니다"));
 
         Refrigerator refrigerator = refrigeratorRepository.save(Refrigerator.from(request, member));

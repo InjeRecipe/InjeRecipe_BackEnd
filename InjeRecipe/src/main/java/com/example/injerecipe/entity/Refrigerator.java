@@ -1,24 +1,25 @@
 package com.example.injerecipe.entity;
 
 import com.example.injerecipe.dto.request.RefrigeratorRequest;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 
+@Entity
 @Getter
 @Builder
-@Document(collection = "refrigerator")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Refrigerator {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
+    private Long id;
 
     private String ingredient;
 
-    @DBRef
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     public static Refrigerator from(RefrigeratorRequest request, Member member){

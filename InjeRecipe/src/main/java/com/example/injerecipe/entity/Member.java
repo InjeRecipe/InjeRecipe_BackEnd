@@ -2,22 +2,25 @@ package com.example.injerecipe.entity;
 
 import com.example.injerecipe.dto.Role;
 import com.example.injerecipe.dto.SocialType;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collection;
 
+@Entity
 @Getter
 @Builder
-@Document(collection = "member")
+@Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
+    private Long id;
+
+    private String account;
 
     private String name;
 
@@ -33,15 +36,17 @@ public class Member {
 
     private int age;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     private String socialId;
 
     private String imageUrl;
 
-    @DBRef
+    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
     private Refrigerator refrigerator;
 
     public void authorizeUser() {
@@ -67,7 +72,7 @@ public class Member {
 
 
 
-    public Member(String id, String name, String email, String provider, String nickname){
+    public Member(Long id, String name, String email, String provider, String nickname){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -75,7 +80,7 @@ public class Member {
         this.nickname = nickname;
     }
 
-    public static Member from(String id, String name, String email, String provider, String nickname){
+    public static Member from(Long id, String name, String email, String provider, String nickname){
         return Member.builder()
                 .id(id)
                 .name(name)

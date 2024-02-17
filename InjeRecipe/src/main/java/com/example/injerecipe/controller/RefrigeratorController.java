@@ -15,7 +15,7 @@ public class RefrigeratorController {
     private final RefrigeratorService refrigeratorService;
 
     @PostMapping("/register")
-    public ApiResponse registerIngredients(@RequestBody RefrigeratorRequest request, @RequestParam String account){
+    public ApiResponse registerIngredients(@RequestBody RefrigeratorRequest request, @RequestParam Long account){
         return ApiResponse.success(refrigeratorService.saveIngredients(request, account));
     }
 }

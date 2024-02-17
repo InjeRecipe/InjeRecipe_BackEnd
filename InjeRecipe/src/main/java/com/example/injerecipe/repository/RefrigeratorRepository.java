@@ -1,9 +1,8 @@
 package com.example.injerecipe.repository;
 
 import com.example.injerecipe.entity.Refrigerator;
-import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
 
-public interface RefrigeratorRepository extends MongoRepository<Refrigerator, String> {
+public interface RefrigeratorRepository extends JpaRepository<Refrigerator, Long> {
 }
