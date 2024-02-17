@@ -34,7 +34,7 @@ public class RecipeService {
     private String ingredientUrl;
 
 
-    public String getRecipe(int start, int end) {
+    public String getRecipe(int start, int end, String rcpNm) {
         HttpURLConnection urlConnection = null;
         InputStream stream = null;
         String result = null;
@@ -44,7 +44,7 @@ public class RecipeService {
                 "/COOKRCP01" +
                 "/" + dataType +
                 "/" + start +
-                "/" + end;
+                "/" + end + "/RCP_NM=" + rcpNm;
 
         try {
             URL url = new URL(urlStr);
