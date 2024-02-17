@@ -11,7 +11,6 @@ import java.util.Collection;
 
 @Getter
 @Builder
-@Document(collection = "member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member {
