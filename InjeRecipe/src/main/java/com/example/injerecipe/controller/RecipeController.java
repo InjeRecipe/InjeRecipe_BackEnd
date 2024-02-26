@@ -30,10 +30,10 @@ public class RecipeController {
 
     @Operation(summary = "재료정보")
     @GetMapping("/ingredients")
-    public ResponseEntity<String> getIngredients(@RequestParam int start, @RequestParam int end){
+    public ResponseEntity<String> getIngredients(@RequestParam String ingredient){
 
 
-        return new ResponseEntity<>(recipeService.getIngredients(start, end), HttpStatus.OK);
+        return new ResponseEntity<>(recipeService.getIngredients(ingredient), HttpStatus.OK);
     }
 
     @Operation(summary = "과정정보")

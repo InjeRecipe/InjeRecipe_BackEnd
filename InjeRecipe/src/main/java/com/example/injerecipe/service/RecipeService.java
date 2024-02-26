@@ -1,5 +1,6 @@
 package com.example.injerecipe.service;
 
+import com.amazonaws.Response;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -9,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class RecipeService {
@@ -64,17 +67,12 @@ public class RecipeService {
         return result;
     }
 
-    public String getIngredients(int start, int end) {
+    public String getIngredients(String ingredient) {
         HttpURLConnection urlConnection = null;
         InputStream stream = null;
         String result = null;
 
-        String urlStr = baseUrl +
-                "/" + serviceKey +
-                "/" + dataType +
-                "/" + ingredientUrl +
-                "/" + start +
-                "/" + end;
+        String urlStr = "https://api.spoonacular.com/food/ingredients/search/?query=" + ingredient + "&number=5&addChildren=true&metaInformation=true&apiKey=" + ingredientUrl;
 
         try {
             URL url = new URL(urlStr);
@@ -92,6 +90,7 @@ public class RecipeService {
             }
         }
         return result;
+
     }
 
     public String getSteps(int start, int end) {
