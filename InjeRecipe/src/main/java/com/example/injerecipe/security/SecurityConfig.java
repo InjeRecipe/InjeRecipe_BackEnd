@@ -57,7 +57,7 @@ public class SecurityConfig {
             "/api/*",
             "/register",
             "/signUp",
-            "/refrigerator/ingredient"
+            "/refrigerator/*"
     };
 
     @Bean

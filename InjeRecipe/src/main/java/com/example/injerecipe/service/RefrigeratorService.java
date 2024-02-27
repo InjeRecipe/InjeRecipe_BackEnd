@@ -1,7 +1,9 @@
 package com.example.injerecipe.service;
 
 import com.example.injerecipe.common.SuccessResponse;
+import com.example.injerecipe.dto.request.IngredientsRequest;
 import com.example.injerecipe.dto.request.RefrigeratorRequest;
+import com.example.injerecipe.dto.response.RefrigeratorResponse;
 import com.example.injerecipe.entity.Member;
 import com.example.injerecipe.entity.RefrigeratorItem;
 import com.example.injerecipe.repository.MemberRepository;
@@ -12,6 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,5 +47,16 @@ public class RefrigeratorService {
         }
         System.out.println("----------------");
         return SuccessResponse.of(HttpStatus.OK, "성공!");
+    }
+
+    @Transactional
+    public List<RefrigeratorResponse> getItem(IngredientsRequest request){
+        Member loginUser = memberRepository.findByAccount(request.getAccount()).orElseThrow(() -> new UsernameNotFoundException(notExist));
+        List<RefrigeratorItem> itemList = refrigeratorItemRepository.findByMember(loginUser);
+        List<RefrigeratorResponse> responseList = new ArrayList<>();
+        for(RefrigeratorItem item : itemList){
+            responseList.add(RefrigeratorResponse.from(item));
+        }
+        return responseList;
     }
 }
