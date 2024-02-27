@@ -53,8 +53,8 @@ public class RecipeController {
 
     @Operation(summary = "레시피 종합정보")
     @GetMapping("/recipe")
-    public ApiResponse searchRecipe(@RequestParam int start, @RequestParam int end){
-        return ApiResponse.success(recipeService.getRecipe(start, end));
+    public ApiResponse searchRecipe(@RequestParam int start, @RequestParam int end, @RequestParam String rcpNm){
+        return ApiResponse.success(recipeService.getRecipe(start, end, rcpNm));
     }
 
 }
