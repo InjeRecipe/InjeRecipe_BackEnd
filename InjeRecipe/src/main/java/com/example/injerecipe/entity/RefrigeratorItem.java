@@ -1,6 +1,5 @@
 package com.example.injerecipe.entity;
 
-import com.example.injerecipe.dto.request.RefrigeratorRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,23 +8,25 @@ import lombok.*;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Refrigerator {
+public class RefrigeratorItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "member_id")
+    @Column(name = "refrigerator_id")
     private Long id;
 
-    private String ingredient;
-
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
-    public static Refrigerator from(RefrigeratorRequest request, Member member){
-        return Refrigerator.builder()
-                .ingredient(request.ingredients())
+    private String ingredient;
+
+
+
+    public static RefrigeratorItem from(Member member, String ingredient){
+        return RefrigeratorItem.builder()
                 .member(member)
+                .ingredient(ingredient)
                 .build();
     }
 

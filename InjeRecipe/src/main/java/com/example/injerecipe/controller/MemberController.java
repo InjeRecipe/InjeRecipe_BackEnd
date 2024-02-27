@@ -20,7 +20,6 @@ public class MemberController {
 
     @PostMapping("/signUp")
     public ApiResponse signUp(@RequestBody MemberSignUpRequest request) throws Exception {
-        memberService.signUp(request);
 
         return ApiResponse.success(memberService.signUp(request));
     }
