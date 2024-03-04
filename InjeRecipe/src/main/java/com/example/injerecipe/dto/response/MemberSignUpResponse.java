@@ -26,4 +26,6 @@ public record MemberSignUpResponse (
                 member.getAge()
         );
     }
+
 }
+

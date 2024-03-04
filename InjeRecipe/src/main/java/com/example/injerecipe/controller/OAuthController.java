@@ -33,6 +33,6 @@ public class OAuthController {
     @PostMapping("/signUp")
     public ApiResponse oauthSignUp(@RequestBody Member member){
         return ApiResponse.success(oAuthService.saverUser(member));
-
     }
+
 }

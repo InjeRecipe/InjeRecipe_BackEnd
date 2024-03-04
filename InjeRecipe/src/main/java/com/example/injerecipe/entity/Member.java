@@ -46,8 +46,6 @@ public class Member {
 
     private String imageUrl;
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private Refrigerator refrigerator;
 
     public void authorizeUser() {
         this.role = Role.USER;
