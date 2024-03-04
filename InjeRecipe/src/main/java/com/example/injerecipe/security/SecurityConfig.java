@@ -52,7 +52,8 @@ public class SecurityConfig {
             "/swagger-ui/**",
             "/weather/get",
             "/openai/chat",
-            "/upload",
+            "/file",
+            "/file/*",
             "/oauth/signUp"
     };
 
