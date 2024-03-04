@@ -20,8 +20,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public MemberSignUpResponse signUp(MemberSignUpRequest request)throws Exception{
-        if (memberRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new Exception("이미 존재하는 이메일입니다.");
+        if (memberRepository.findByEmail(request.getAccount()).isPresent()) {
+            throw new Exception("이미 존재하는 계정입니다.");
         }
 
         if (memberRepository.findByNickname(request.getNickname()).isPresent()) {
@@ -29,7 +29,7 @@ public class MemberService {
         }
 
         Member member = Member.builder()
-                .email(request.getEmail())
+                .email(request.getAccount())
                 .password(request.getPassword())
                 .nickname(request.getNickname())
                 .age(request.getAge())

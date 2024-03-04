@@ -18,4 +18,6 @@ public class RefrigeratorController {
     public ApiResponse registerIngredients(@RequestBody RefrigeratorRequest request, @RequestParam Long account){
         return ApiResponse.success(refrigeratorService.saveIngredients(request, account));
     }
+
+
 }
