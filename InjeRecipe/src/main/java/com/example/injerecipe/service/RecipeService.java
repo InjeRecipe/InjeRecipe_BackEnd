@@ -1,7 +1,16 @@
 package com.example.injerecipe.service;
 
+import com.example.injerecipe.dto.response.RecipeSearchResponse;
+import com.example.injerecipe.entity.Recipe;
+import com.example.injerecipe.repository.RecipeRepository;
+import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,32 +18,32 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class RecipeService {
-    private String baseUrl = "http://211.237.50.150:7080/openapi";
-
-    private String s = "나물비빔밥";
-    @Value("${openApi.serviceKey}")
-    private String serviceKey;
-
     @Value("${openApi.recipe.serviceKey}")
     private String recipeServiceKey;
 
     @Value("${openApi.dataType}")
     private String dataType;
 
-    @Value("${openApi.apiUrl}")
-    private String recipeUrl;
+    private final RecipeRepository recipeRepository;
 
-    @Value("${openApi.step.apiUrl}")
-    private String stepUrl;
+    public List<RecipeSearchResponse> searchRecipes(String keyword) {
+        List<Recipe> recipeList = recipeRepository.findByRecipeNmContaining(keyword);
+        List<RecipeSearchResponse> searchResponses = new ArrayList<>();
 
-    @Value("${openApi.irdnt.apiUrl}")
-    private String ingredientUrl;
+        for(Recipe recipe : recipeList){
+            searchResponses.add(RecipeSearchResponse.from(recipe));
+        }
+        return searchResponses;
+    }
 
-
-    public String getRecipe(int start, int end, String rcpNm) {
+    @Transactional
+    public String getRecipe(int start, int end) throws ParseException {
         HttpURLConnection urlConnection = null;
         InputStream stream = null;
         String result = null;
@@ -44,36 +53,6 @@ public class RecipeService {
                 "/COOKRCP01" +
                 "/" + dataType +
                 "/" + start +
-                "/" + end + "/RCP_NM=" + rcpNm;
-
-        try {
-            URL url = new URL(urlStr);
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-            stream = getNetworkConnection(urlConnection);
-            result = readStreamToString(stream);
-
-            if (stream != null) stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-        return result;
-    }
-
-    public String getIngredients(int start, int end) {
-        HttpURLConnection urlConnection = null;
-        InputStream stream = null;
-        String result = null;
-
-        String urlStr = baseUrl +
-                "/" + serviceKey +
-                "/" + dataType +
-                "/" + ingredientUrl +
-                "/" + start +
                 "/" + end;
 
         try {
@@ -91,65 +70,16 @@ public class RecipeService {
                 urlConnection.disconnect();
             }
         }
-        return result;
-    }
+        JSONParser jsonParser = new JSONParser();
+        Object obj = jsonParser.parse(result);
+        JSONObject jsonObject = (JSONObject) jsonParser.parse(result);
+        JSONObject jsonCook = (JSONObject) jsonObject.get("COOKRCP01");
+        JSONArray jsonArray = (JSONArray) jsonCook.get("row");
+        for(int i = 0; i<jsonArray.size(); i++) {
 
-    public String getSteps(int start, int end) {
-        HttpURLConnection urlConnection = null;
-        InputStream stream = null;
-        String result = null;
+            JSONObject jsonRow = (JSONObject) jsonArray.get(i);
+            recipeRepository.save(makeDto(jsonRow));
 
-        String urlStr = baseUrl +
-                "/" + serviceKey +
-                "/" + dataType +
-                "/" + stepUrl +
-                "/" + start +
-                "/" + end;
-
-        try {
-            URL url = new URL(urlStr);
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-            stream = getNetworkConnection(urlConnection);
-            result = readStreamToString(stream);
-
-            if (stream != null) stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-        }
-        return result;
-    }
-
-    public String getRecipes(int start, int end) {
-        HttpURLConnection urlConnection = null;
-        InputStream stream = null;
-        String result = null;
-
-        String urlStr = baseUrl +
-                "/" + serviceKey +
-                "/" + dataType +
-                "/" + recipeUrl +
-                "/" + start +
-                "/" + end;
-
-        try {
-            URL url = new URL(urlStr);
-
-            urlConnection = (HttpURLConnection) url.openConnection();
-            stream = getNetworkConnection(urlConnection);
-            result = readStreamToString(stream);
-
-            if (stream != null) stream.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
         }
         return result;
     }
@@ -182,4 +112,56 @@ public class RecipeService {
         return result.toString();
     }
 
+    private Recipe makeDto(JSONObject item) {
+        Recipe recipe = Recipe.builder()
+                .recipeSeq((String) item.get("RCP_SEQ"))
+                .recipeNm((String) item.get("RCP_NM"))
+                .recipeWay((String) item.get("RCP_WAY2"))
+                .recipePat((String) item.get("RCP_PAT2"))
+                .recipeEng((String) item.get("INFO_ENG"))
+                .recipeFileS((String) item.get("ATT_FILE_NO_MAIN"))
+                .recipeImage((String) item.get("MANUAL_IMG01"))
+                .recipeManual((String) item.get("MANUAL01"))
+                .recipeImage2((String) item.get("MANUAL_IMG02"))
+                .recipeManual2((String) item.get("MANUAL02"))
+                .recipeImage3((String) item.get("MANUAL_IMG03"))
+                .recipeManual3((String) item.get("MANUAL03"))
+                .recipeImage4((String) item.get("MANUAL_IMG04"))
+                .recipeManual4((String) item.get("MANUAL04"))
+                .recipeImage5((String) item.get("MANUAL_IMG05"))
+                .recipeManual5((String) item.get("MANUAL05"))
+                .recipeImage6((String) item.get("MANUAL_IMG06"))
+                .recipeManual6((String) item.get("MANUAL06"))
+                .recipeImage7((String) item.get("MANUAL_IMG07"))
+                .recipeManual7((String) item.get("MANUAL07"))
+                .recipeImage8((String) item.get("MANUAL_IMG08"))
+                .recipeManual8((String) item.get("MANUAL08"))
+                .recipeImage9((String) item.get("MANUAL_IMG09"))
+                .recipeManual9((String) item.get("MANUAL09"))
+                .recipeImage10((String) item.get("MANUAL_IMG10"))
+                .recipeManual10((String) item.get("MANUAL10"))
+                .recipeImage11((String) item.get("MANUAL_IMG11"))
+                .recipeManual11((String) item.get("MANUAL11"))
+                .recipeImage12((String) item.get("MANUAL_IMG12"))
+                .recipeManual12((String) item.get("MANUAL12"))
+                .recipeImage13((String) item.get("MANUAL_IMG13"))
+                .recipeManual13((String) item.get("MANUAL13"))
+                .recipeImage14((String) item.get("MANUAL_IMG14"))
+                .recipeManual14((String) item.get("MANUAL14"))
+                .recipeImage15((String) item.get("MANUAL_IMG15"))
+                .recipeManual15((String) item.get("MANUAL15"))
+                .recipeImage16((String) item.get("MANUAL_IMG16"))
+                .recipeManual16((String) item.get("MANUAL16"))
+                .recipeImage17((String) item.get("MANUAL_IMG17"))
+                .recipeManual17((String) item.get("MANUAL17"))
+                .recipeImage18((String) item.get("MANUAL_IMG18"))
+                .recipeManual18((String) item.get("MANUAL18"))
+                .recipeImage19((String) item.get("MANUAL_IMG19"))
+                .recipeManual19((String) item.get("MANUAL19"))
+                .recipeImage20((String) item.get("MANUAL_IMG20"))
+                .recipeManual20((String) item.get("MANUAL20"))
+
+                .build();
+        return recipe;
+    }
 }

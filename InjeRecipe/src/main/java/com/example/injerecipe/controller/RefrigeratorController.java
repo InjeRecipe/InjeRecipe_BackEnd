@@ -27,4 +27,6 @@ public class RefrigeratorController {
     public ApiResponse getIngredients(@RequestBody IngredientsRequest request) {
         return ApiResponse.success(refrigeratorService.getItem(request));
     }
+
+
 }
