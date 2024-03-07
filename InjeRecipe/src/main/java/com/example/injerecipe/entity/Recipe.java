@@ -28,9 +28,11 @@ public class Recipe {
 
     private String recipeFileS;
 
-    private String recipeImage;
+    @Column(name = "recipePartsDtls", length = 2048)
+    private String recipePartsDtls;
+    private String recipeImage1;
 
-    private String recipeManual;
+    private String recipeManual1;
 
     private String recipeImage2;
 

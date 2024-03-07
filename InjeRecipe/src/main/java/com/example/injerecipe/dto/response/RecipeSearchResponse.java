@@ -19,9 +19,11 @@ public class RecipeSearchResponse {
 
     private String recipeFileS;
 
-    private String recipeImage;
+    private String recipePartsDtls;
 
-    private String recipeManual;
+    private String recipeImage1;
+
+    private String recipeManual1;
 
     private String recipeImage2;
 
@@ -107,8 +109,8 @@ public class RecipeSearchResponse {
                 .recipePat(recipe.getRecipePat())
                 .recipeEng(recipe.getRecipeEng())
                 .recipeFileS(recipe.getRecipeFileS())
-                .recipeImage(recipe.getRecipeImage())
-                .recipeManual(recipe.getRecipeManual())
+                .recipeImage1(recipe.getRecipeImage1())
+                .recipeManual1(recipe.getRecipeManual1())
                 .recipeImage2(recipe.getRecipeImage2())
                 .recipeManual2(recipe.getRecipeManual2())
                 .recipeImage3(recipe.getRecipeImage3())
