@@ -19,11 +19,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public MemberSignUpResponse signUp(MemberSignUpRequest request)throws Exception{
+    public MemberSignUpResponse signUp(MemberSignUpRequest request) throws Exception {
 
         if (memberRepository.findByEmail(request.getAccount()).isPresent()) {
             throw new Exception("이미 존재하는 계정입니다.");
-
+        }
         if (memberRepository.findByNickname(request.getNickname()).isPresent()) {
             throw new Exception("이미 존재하는 닉네임입니다.");
         }
@@ -43,3 +43,4 @@ public class MemberService {
         return MemberSignUpResponse.from(member);
     }
 }
+
