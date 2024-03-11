@@ -31,6 +31,7 @@ public class RecipeController {
     @Operation(summary = "레시피 검색")
     @PostMapping("/recipes")
     public ApiResponse searchRecipes(@RequestBody RecipeSearchRequest request) {
-        return ApiResponse.success(recipeService.searchRecipes(request.getKeyword()));
+
+        return ApiResponse.success(recipeService.searchRecipes(request));
     }
 }
