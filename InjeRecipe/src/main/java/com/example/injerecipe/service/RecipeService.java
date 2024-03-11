@@ -1,8 +1,10 @@
 package com.example.injerecipe.service;
 
+import com.example.injerecipe.dto.request.RecipeSearchRequest;
 import com.example.injerecipe.dto.response.RecipeSearchResponse;
 import com.example.injerecipe.entity.Recipe;
 import com.example.injerecipe.repository.RecipeRepository;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -19,7 +21,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -32,13 +37,28 @@ public class RecipeService {
 
     private final RecipeRepository recipeRepository;
 
-    public List<RecipeSearchResponse> searchRecipes(String keyword) {
-        List<Recipe> recipeList = recipeRepository.findByRecipeNmContaining(keyword);
-        List<RecipeSearchResponse> searchResponses = new ArrayList<>();
 
+    public List<RecipeSearchResponse> searchRecipes(RecipeSearchRequest request) {
+        List<Recipe> recipeList = recipeRepository.findByRecipeNmContaining(request.getKeyword1());
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword2()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword2()).get(i));
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword3()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword3()).get(i));
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword4()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword4()).get(i));
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword5()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword5()).get(i));
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword6()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword6()).get(i));
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword7()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword7()).get(i));
+        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword8()).size(); i++)
+            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword8()).get(i));
+        List<RecipeSearchResponse> searchResponses = new ArrayList<>();
         for(Recipe recipe : recipeList){
             searchResponses.add(RecipeSearchResponse.from(recipe));
         }
+
         return searchResponses;
     }
 

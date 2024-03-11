@@ -8,5 +8,12 @@ import lombok.NoArgsConstructor;
 @Getter
 public class RecipeSearchRequest {
     @Schema(description = "검색어", example = "된장찌개")
-    String keyword;
+    String keyword1;
+    String keyword2;
+    String keyword3;
+    String keyword4;
+    String keyword5;
+    String keyword6;
+    String keyword7;
+    String keyword8;
 }
