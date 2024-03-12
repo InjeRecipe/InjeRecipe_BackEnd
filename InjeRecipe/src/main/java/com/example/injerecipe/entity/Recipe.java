@@ -3,6 +3,8 @@ package com.example.injerecipe.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Builder
@@ -30,83 +32,13 @@ public class Recipe {
 
     @Column(name = "recipePartsDtls", length = 2048)
     private String recipePartsDtls;
-    private String recipeImage1;
+    @ElementCollection
+    @CollectionTable(name = "recipe_images", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "image_url")
+    private List<String> recipeImages;
 
-    private String recipeManual1;
-
-    private String recipeImage2;
-
-    private String recipeManual2;
-
-    private String recipeImage3;
-
-    private String recipeManual3;
-
-    private String recipeImage4;
-
-    private String recipeManual4;
-
-    private String recipeImage5;
-
-    private String recipeManual5;
-
-    private String recipeImage6;
-
-    private String recipeManual6;
-
-    private String recipeImage7;
-
-    private String recipeManual7;
-
-    private String recipeImage8;
-
-    private String recipeManual8;
-
-    private String recipeImage9;
-
-    private String recipeManual9;
-
-    private String recipeImage10;
-
-    private String recipeManual10;
-
-    private String recipeImage11;
-
-    private String recipeManual11;
-
-    private String recipeImage12;
-
-    private String recipeManual12;
-
-    private String recipeImage13;
-
-    private String recipeManual13;
-
-    private String recipeImage14;
-
-    private String recipeManual14;
-
-    private String recipeImage15;
-
-    private String recipeManual15;
-
-    private String recipeImage16;
-
-    private String recipeManual16;
-
-    private String recipeImage17;
-
-    private String recipeManual17;
-
-    private String recipeImage18;
-
-    private String recipeManual18;
-
-    private String recipeImage19;
-
-    private String recipeManual19;
-
-    private String recipeImage20;
-
-    private String recipeManual20;
+    @ElementCollection
+    @CollectionTable(name = "recipe_manuals", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Column(name = "manual_text", length = 2048)
+    private List<String> recipeManuals;
 }

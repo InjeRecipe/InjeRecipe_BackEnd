@@ -55,6 +55,7 @@ public class SecurityConfig {
             "/upload",
             "/oauth/signUp",
             "/api/*",
+            "/api/search/*",
             "/register",
             "/signUp",
             "/refrigerator/*"

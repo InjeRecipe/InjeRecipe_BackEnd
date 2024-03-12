@@ -148,56 +148,33 @@ public class RecipeService {
     }
 
     private Recipe makeDto(JSONObject item) {
-        Recipe recipe = Recipe.builder()
-                .recipeSeq((String) item.get("RCP_SEQ"))
-                .recipeNm((String) item.get("RCP_NM"))
-                .recipeWay((String) item.get("RCP_WAY2"))
-                .recipePat((String) item.get("RCP_PAT2"))
-                .recipeEng((String) item.get("INFO_ENG"))
-                .recipeFileS((String) item.get("ATT_FILE_NO_MAIN"))
-                .recipePartsDtls((String) item.get("RCP_PARTS_DTLS"))
-                .recipeImage1((String) item.get("MANUAL_IMG01"))
-                .recipeManual1((String) item.get("MANUAL01"))
-                .recipeImage2((String) item.get("MANUAL_IMG02"))
-                .recipeManual2((String) item.get("MANUAL02"))
-                .recipeImage3((String) item.get("MANUAL_IMG03"))
-                .recipeManual3((String) item.get("MANUAL03"))
-                .recipeImage4((String) item.get("MANUAL_IMG04"))
-                .recipeManual4((String) item.get("MANUAL04"))
-                .recipeImage5((String) item.get("MANUAL_IMG05"))
-                .recipeManual5((String) item.get("MANUAL05"))
-                .recipeImage6((String) item.get("MANUAL_IMG06"))
-                .recipeManual6((String) item.get("MANUAL06"))
-                .recipeImage7((String) item.get("MANUAL_IMG07"))
-                .recipeManual7((String) item.get("MANUAL07"))
-                .recipeImage8((String) item.get("MANUAL_IMG08"))
-                .recipeManual8((String) item.get("MANUAL08"))
-                .recipeImage9((String) item.get("MANUAL_IMG09"))
-                .recipeManual9((String) item.get("MANUAL09"))
-                .recipeImage10((String) item.get("MANUAL_IMG10"))
-                .recipeManual10((String) item.get("MANUAL10"))
-                .recipeImage11((String) item.get("MANUAL_IMG11"))
-                .recipeManual11((String) item.get("MANUAL11"))
-                .recipeImage12((String) item.get("MANUAL_IMG12"))
-                .recipeManual12((String) item.get("MANUAL12"))
-                .recipeImage13((String) item.get("MANUAL_IMG13"))
-                .recipeManual13((String) item.get("MANUAL13"))
-                .recipeImage14((String) item.get("MANUAL_IMG14"))
-                .recipeManual14((String) item.get("MANUAL14"))
-                .recipeImage15((String) item.get("MANUAL_IMG15"))
-                .recipeManual15((String) item.get("MANUAL15"))
-                .recipeImage16((String) item.get("MANUAL_IMG16"))
-                .recipeManual16((String) item.get("MANUAL16"))
-                .recipeImage17((String) item.get("MANUAL_IMG17"))
-                .recipeManual17((String) item.get("MANUAL17"))
-                .recipeImage18((String) item.get("MANUAL_IMG18"))
-                .recipeManual18((String) item.get("MANUAL18"))
-                .recipeImage19((String) item.get("MANUAL_IMG19"))
-                .recipeManual19((String) item.get("MANUAL19"))
-                .recipeImage20((String) item.get("MANUAL_IMG20"))
-                .recipeManual20((String) item.get("MANUAL20"))
+        Recipe.RecipeBuilder recipeBuilder = Recipe.builder()
+                .recipeSeq(getString(item, "RCP_SEQ"))
+                .recipeNm(getString(item, "RCP_NM"))
+                .recipeWay(getString(item, "RCP_WAY2"))
+                .recipePat(getString(item, "RCP_PAT2"))
+                .recipeEng(getString(item, "INFO_ENG"))
+                .recipeFileS(getString(item, "ATT_FILE_NO_MAIN"))
+                .recipePartsDtls(getString(item, "RCP_PARTS_DTLS"));
 
-                .build();
-        return recipe;
+        List<String> recipeImages = new ArrayList<>();
+        List<String> recipeManuals = new ArrayList<>();
+
+        for (int i = 1; i <= 20; i++) {
+            String imageKey = "MANUAL_IMG" + String.format("%02d", i);
+            String manualKey = "MANUAL" + String.format("%02d", i);
+            recipeImages.add(getString(item, imageKey));
+            recipeManuals.add(getString(item, manualKey));
+        }
+
+        recipeBuilder
+                .recipeImages(recipeImages)
+                .recipeManuals(recipeManuals);
+
+        return recipeBuilder.build();
+    }
+
+    private String getString(JSONObject item, String key) {
+        return (String) item.get(key);
     }
 }
