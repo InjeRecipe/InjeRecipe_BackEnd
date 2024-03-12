@@ -11,6 +11,7 @@ import com.example.injerecipe.service.JwtService;
 import com.example.injerecipe.service.LoginService;
 import com.example.injerecipe.service.OAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -58,7 +59,8 @@ public class SecurityConfig {
             "/api/search/*",
             "/register",
             "/signUp",
-            "/refrigerator/*"
+            "/refrigerator/*",
+            "/boards/write"
     };
 
     @Bean

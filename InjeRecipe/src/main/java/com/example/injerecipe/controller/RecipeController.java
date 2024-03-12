@@ -3,7 +3,6 @@ package com.example.injerecipe.controller;
 import com.example.injerecipe.dto.ApiResponse;
 import com.example.injerecipe.dto.request.RecipeRequest;
 import com.example.injerecipe.dto.request.RecipeSearchRequest;
-import com.example.injerecipe.entity.Recipe;
 import com.example.injerecipe.service.RecipeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.*;
-import java.util.List;
 
 @Tag(name = "레시피 API")
 @RestController
@@ -31,14 +28,12 @@ public class RecipeController {
     @Operation(summary = "레시피 다중 검색")
     @PostMapping("/search/recipes")
     public ApiResponse searchRecipes(@RequestBody RecipeSearchRequest request) {
-
         return ApiResponse.success(recipeService.searchRecipes(request));
     }
 
     @Operation(summary = "레시피 단일 검색")
     @PostMapping("/search/recipe")
     public ApiResponse searchRecipe(@RequestBody RecipeSearchRequest request) {
-
         return ApiResponse.success(recipeService.searchRecipe(request));
     }
 }
