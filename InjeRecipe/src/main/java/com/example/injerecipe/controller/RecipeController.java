@@ -28,10 +28,17 @@ public class RecipeController {
         return ApiResponse.success(recipeService.getRecipe(request.getStart(), request.getEnd()));
     }
 
-    @Operation(summary = "레시피 검색")
-    @PostMapping("/recipes")
+    @Operation(summary = "레시피 다중 검색")
+    @PostMapping("/search/recipes")
     public ApiResponse searchRecipes(@RequestBody RecipeSearchRequest request) {
 
         return ApiResponse.success(recipeService.searchRecipes(request));
+    }
+
+    @Operation(summary = "레시피 단일 검색")
+    @PostMapping("/search/recipe")
+    public ApiResponse searchRecipe(@RequestBody RecipeSearchRequest request) {
+
+        return ApiResponse.success(recipeService.searchRecipe(request));
     }
 }
