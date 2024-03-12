@@ -109,6 +109,7 @@ public class RecipeSearchResponse {
                 .recipePat(recipe.getRecipePat())
                 .recipeEng(recipe.getRecipeEng())
                 .recipeFileS(recipe.getRecipeFileS())
+                .recipePartsDtls(recipe.getRecipePartsDtls())
                 .recipeImage1(recipe.getRecipeImage1())
                 .recipeManual1(recipe.getRecipeManual1())
                 .recipeImage2(recipe.getRecipeImage2())

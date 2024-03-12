@@ -18,6 +18,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -38,28 +40,41 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
 
 
+    @Transactional
     public List<RecipeSearchResponse> searchRecipes(RecipeSearchRequest request) {
+        List<RecipeSearchResponse> searchResponses = new ArrayList<>();
+
+        for (int i = 1; i <= 8; i++) {
+            String keyword = (String) invokeMethod(request, "getKeyword" + i);
+            if (keyword != null) {
+                List<Recipe> recipes = recipeRepository.findByRecipeNmContaining(keyword);
+                if (!recipes.isEmpty()) {
+                    searchResponses.add(RecipeSearchResponse.from(recipes.get(0)));
+                }
+            }
+        }
+
+        return searchResponses;
+    }
+
+    @Transactional
+    public List<RecipeSearchResponse> searchRecipe(RecipeSearchRequest request) {
         List<Recipe> recipeList = recipeRepository.findByRecipeNmContaining(request.getKeyword1());
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword2()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword2()).get(i));
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword3()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword3()).get(i));
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword4()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword4()).get(i));
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword5()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword5()).get(i));
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword6()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword6()).get(i));
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword7()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword7()).get(i));
-        for(int i = 0; i<recipeRepository.findByRecipeNmContaining(request.getKeyword8()).size(); i++)
-            recipeList.add(recipeRepository.findByRecipeNmContaining(request.getKeyword8()).get(i));
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
         for(Recipe recipe : recipeList){
             searchResponses.add(RecipeSearchResponse.from(recipe));
         }
 
         return searchResponses;
+    }
+    private Object invokeMethod(Object obj, String methodName) {
+        try {
+            Method method = obj.getClass().getMethod(methodName);
+            return method.invoke(obj);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            // 메서드가 없거나 호출할 수 없는 경우 null 반환
+            return null;
+        }
     }
 
     @Transactional
