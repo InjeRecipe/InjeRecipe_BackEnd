@@ -9,8 +9,6 @@ import java.util.List;
 
 @Data
 public class RecipeBoardRequest {
-    @Schema(description = "이메일", example = "test1234")
-    private String email;
 
     @Schema(description = "일련번호", example = "33")
     private String recipe_seq;

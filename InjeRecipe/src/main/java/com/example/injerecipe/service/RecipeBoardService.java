@@ -39,8 +39,8 @@ public class RecipeBoardService {
 
 
     @Transactional
-    public RecipeBoard registerRecipe(RecipeBoardRequest request) throws IOException {
-        Member member = memberRepository.findByAccount(request.getEmail())
+    public RecipeBoard registerRecipe(RecipeBoardRequest request, Long id) throws IOException {
+        Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
 
         // 이미지 업로드 및 URL 생성
