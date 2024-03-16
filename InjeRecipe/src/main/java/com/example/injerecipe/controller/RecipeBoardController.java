@@ -10,14 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("/board")
 @RequiredArgsConstructor
 public class RecipeBoardController {
     private final RecipeBoardService recipeBoardService;
 
     @PostMapping("/write")
     public ApiResponse registerRecipe(@RequestBody RecipeBoardRequest request) {
-        System.out.println(":::::::::::::::::::" + request.getEmail());
-            return ApiResponse.success(recipeBoardService.registerRecipe(request));
+        return ApiResponse.success(recipeBoardService.registerRecipe(request));
     }
 }

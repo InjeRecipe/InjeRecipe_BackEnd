@@ -1,6 +1,7 @@
 package com.example.injerecipe.controller;
 
 import com.example.injerecipe.dto.ApiResponse;
+import com.example.injerecipe.dto.request.RecipeBoardRequest;
 import com.example.injerecipe.dto.request.RecipeRequest;
 import com.example.injerecipe.dto.request.RecipeSearchRequest;
 import com.example.injerecipe.service.RecipeService;
@@ -36,4 +37,5 @@ public class RecipeController {
     public ApiResponse searchRecipe(@RequestBody RecipeSearchRequest request) {
         return ApiResponse.success(recipeService.searchRecipe(request));
     }
+
 }

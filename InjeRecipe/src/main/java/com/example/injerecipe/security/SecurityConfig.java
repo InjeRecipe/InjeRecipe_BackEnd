@@ -60,7 +60,7 @@ public class SecurityConfig {
             "/register",
             "/signUp",
             "/refrigerator/*",
-            "/boards/write"
+            "/board/write"
     };
 
     @Bean
