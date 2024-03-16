@@ -12,6 +12,7 @@ import com.example.injerecipe.service.JwtService;
 import com.example.injerecipe.service.LoginService;
 import com.example.injerecipe.service.OAuthService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,10 +39,6 @@ public class SecurityConfig {
     private final ObjectMapper objectMapper;
     private final String[] allowedUrls = {"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/v3/api-docs/**", "/swagger-ui/**", "/weather/get", "/openai/chat", "/upload", "/oauth/signUp", "/api/*", "/register", "/member/signUp", "/api/search/*", "/refrigerator/*"};
 
-    private static final String[] PERMIT_URL_ARRAY = {
-
-
-    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

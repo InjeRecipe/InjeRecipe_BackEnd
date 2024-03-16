@@ -36,7 +36,6 @@ public class MemberService {
         Member member = Member.builder()
 
                 .account(request.getAccount())
-
                 .password(request.getPassword())
                 .nickname(request.getNickname())
                 .age(request.getAge())

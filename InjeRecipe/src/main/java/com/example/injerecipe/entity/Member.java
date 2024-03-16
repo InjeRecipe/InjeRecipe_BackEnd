@@ -2,10 +2,13 @@ package com.example.injerecipe.entity;
 
 import com.example.injerecipe.dto.Role;
 import com.example.injerecipe.dto.SocialType;
-import io.swagger.v3.oas.annotations.tags.Tag;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.List;
 
 
 @Entity
@@ -45,6 +48,9 @@ public class Member {
     private String socialId;
 
     private String imageUrl;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<RecipeBoard> boards;
 
 
     public void authorizeUser() {
