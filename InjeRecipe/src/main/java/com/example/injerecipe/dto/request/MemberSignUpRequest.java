@@ -1,5 +1,6 @@
 package com.example.injerecipe.dto.request;
 
+
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,5 +19,14 @@ public class MemberSignUpRequest {
     private String nickname;
 
     @Schema(description = "나이", example = "25")
+
     private int age;
+
+    private Role role;
+
+    private SocialType socialType;
+
+    private String socialId;
+
+    private String imageUrl;
 }
