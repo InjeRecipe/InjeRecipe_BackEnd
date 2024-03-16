@@ -1,6 +1,8 @@
 package com.example.injerecipe.dto.request;
 
 
+import com.example.injerecipe.dto.Role;
+import com.example.injerecipe.dto.SocialType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
