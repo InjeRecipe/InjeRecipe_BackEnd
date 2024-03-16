@@ -1,22 +1,30 @@
 package com.example.injerecipe.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Getter
-@Builder
-@Table
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class Recipe {
-
+@NoArgsConstructor
+@Builder
+@Getter
+public class RecipeBoard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recipe_id")
+    @Column(name = "board_id")
     private Long id;
+
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     private String recipeSeq;
 
@@ -34,12 +42,14 @@ public class Recipe {
     private String recipePartsDtls;
 
     @ElementCollection
-    @CollectionTable(name = "recipe_images", joinColumns = @JoinColumn(name = "recipe_id"))
+    @CollectionTable(name = "recipe_board_images", joinColumns = @JoinColumn(name = "board_id"))
     @Column(name = "image_url")
     private List<String> recipeImages;
 
     @ElementCollection
-    @CollectionTable(name = "recipe_manuals", joinColumns = @JoinColumn(name = "recipe_id"))
+    @CollectionTable(name = "recipe_board_manuals", joinColumns = @JoinColumn(name = "board_id"))
     @Column(name = "manual_text", length = 2048)
     private List<String> recipeManuals;
+
+
 }

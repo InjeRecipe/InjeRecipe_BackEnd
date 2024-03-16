@@ -2,40 +2,36 @@ package com.example.injerecipe.controller;
 
 import com.example.injerecipe.dto.ApiResponse;
 import com.example.injerecipe.dto.request.RecipeBoardRequest;
-import com.example.injerecipe.dto.request.RecipeRequest;
 import com.example.injerecipe.dto.request.RecipeSearchRequest;
-import com.example.injerecipe.service.RecipeService;
+import com.example.injerecipe.service.RecipeBoardService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.json.simple.parser.ParseException;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 
-@Tag(name = "레시피 API")
 @RestController
-@RequestMapping("api")
+@RequestMapping("/board")
 @RequiredArgsConstructor
-public class RecipeController {
+public class RecipeBoardController {
+    private final RecipeBoardService recipeBoardService;
 
-    private final RecipeService recipeService;
-
-    @Operation(summary = "레시피 저장")
-    @PostMapping("/recipe")
-    public ApiResponse saveRecipe(@RequestBody RecipeRequest request)throws ParseException{
-        return ApiResponse.success(recipeService.getRecipe(request.getStart(), request.getEnd()));
+    @Operation(summary = "레시피 업로드")
+    @PostMapping(name = "/write", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
+    public ApiResponse registerRecipe(@ModelAttribute RecipeBoardRequest request) throws IOException {
+        return ApiResponse.success(recipeBoardService.registerRecipe(request));
     }
 
     @Operation(summary = "레시피 다중 검색")
     @PostMapping("/search/recipes")
     public ApiResponse searchRecipes(@RequestBody RecipeSearchRequest request) {
-        return ApiResponse.success(recipeService.searchRecipes(request));
+        return ApiResponse.success(recipeBoardService.searchRecipes(request));
     }
 
     @Operation(summary = "레시피 단일 검색")
     @PostMapping("/search/recipe")
     public ApiResponse searchRecipe(@RequestBody RecipeSearchRequest request) {
-        return ApiResponse.success(recipeService.searchRecipe(request));
+        return ApiResponse.success(recipeBoardService.searchRecipe(request));
     }
-
 }
