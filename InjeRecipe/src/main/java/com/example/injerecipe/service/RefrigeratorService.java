@@ -27,20 +27,14 @@ public class RefrigeratorService {
 
     private String notExist = "계정이 존재하지 않습니다.";
 
-//    public RefrigeratorResponse saveIngredients(RefrigeratorRequest request, Long account){
-//        Member member = memberRepository.findById(account).orElseThrow(() -> new UsernameNotFoundException("계정이 존재하지 않습니다"));
-//
-//        Refrigerator refrigerator = refrigeratorItemRepository.save(Refrigerator.from(request, member));
-//
-//        return RefrigeratorResponse.from(refrigerator);
-//    }
 
     @Transactional
-    public SuccessResponse addIngredientToRefrigerator(RefrigeratorRequest refrigeratorRequest) {
-        Member loginUser = memberRepository.findByAccount(refrigeratorRequest.account()).orElseThrow(() -> new UsernameNotFoundException(notExist));
+    public SuccessResponse addIngredientToRefrigerator(RefrigeratorRequest refrigeratorRequest, Long id) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
         Optional<RefrigeratorItem> item = refrigeratorItemRepository.findByIngredient(refrigeratorRequest.ingredient());
         if(item.isEmpty())
-            refrigeratorItemRepository.save(RefrigeratorItem.from(loginUser, refrigeratorRequest.ingredient()));
+            refrigeratorItemRepository.save(RefrigeratorItem.from(member, refrigeratorRequest.ingredient()));
         else{
             refrigeratorItemRepository.delete(item.get());
             refrigeratorItemRepository.flush();

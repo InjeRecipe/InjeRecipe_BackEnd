@@ -7,6 +7,8 @@ import com.example.injerecipe.service.RefrigeratorService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -18,8 +20,8 @@ public class RefrigeratorController {
 
     @Operation(summary = "재료 등록")
     @PostMapping("/ingredient")
-    public ApiResponse addIngredientToRefrigerator(@RequestBody RefrigeratorRequest refrigeratorRequest) {
-        return ApiResponse.success(refrigeratorService.addIngredientToRefrigerator(refrigeratorRequest));
+    public ApiResponse addIngredientToRefrigerator(@RequestBody RefrigeratorRequest refrigeratorRequest, @AuthenticationPrincipal User user) {
+        return ApiResponse.success(refrigeratorService.addIngredientToRefrigerator(refrigeratorRequest, new Long(user.getUsername())));
     }
 
     @Operation(summary = "전체 재료 조회")
