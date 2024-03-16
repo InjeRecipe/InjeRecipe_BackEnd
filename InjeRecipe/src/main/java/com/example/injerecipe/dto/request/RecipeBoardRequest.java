@@ -3,6 +3,7 @@ package com.example.injerecipe.dto.request;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.Getter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -32,6 +33,6 @@ public class RecipeBoardRequest {
     @Schema(description = "재료 정보", example = "두부 20g(2×2×2cm), 애느타리버섯 20g(4가닥), 감자 10g(4×3×1cm), 양파 10g(2×1cm), 대파 10g(5cm), 된장 5g(1작은술), 물 300ml(1½컵)")
     private String recipe_parts_dtls;
 
-    private List<String> recipe_images;
+    private List<MultipartFile> recipe_images;
     private List<String> recipe_manuals;
 }
