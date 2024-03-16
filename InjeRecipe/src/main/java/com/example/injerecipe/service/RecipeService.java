@@ -51,6 +51,9 @@ public class RecipeService {
                 if (!recipes.isEmpty()) {
                     searchResponses.add(RecipeSearchResponse.from(recipes.get(0)));
                 }
+                else{
+                    searchResponses.add(RecipeSearchResponse.from(null));
+                }
             }
         }
 
