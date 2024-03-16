@@ -1,6 +1,7 @@
 package com.example.injerecipe.controller;
 
 import com.example.injerecipe.dto.ApiResponse;
+import com.example.injerecipe.dto.request.WeatherRequest;
 import com.example.injerecipe.service.WeatherService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,7 +20,7 @@ public class WeatherController {
 
     @Operation(summary = "위도 경도로 날씨 받아오기")
     @PostMapping("/get")
-    public ApiResponse getWeather(@RequestParam String lat, @RequestParam String lon){
-        return ApiResponse.success(weatherService.getWeatherString(lat, lon));
+    public ApiResponse getWeather(@RequestBody WeatherRequest request){
+        return ApiResponse.success(weatherService.getWeatherString(request.getLat(), request.getLon()));
     }
 }

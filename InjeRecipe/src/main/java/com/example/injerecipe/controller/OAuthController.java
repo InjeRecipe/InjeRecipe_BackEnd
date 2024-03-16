@@ -32,9 +32,11 @@ public class OAuthController {
 
     @Operation(summary = "소셜 멤버 정보 저장")
     @PostMapping("/signUp")
+
     public String oauthSignUp(@RequestBody MemberSignUpRequest request)throws Exception {
         memberService.signUp(request);
         return "회원가입 성공 !";
 
     }
+
 }

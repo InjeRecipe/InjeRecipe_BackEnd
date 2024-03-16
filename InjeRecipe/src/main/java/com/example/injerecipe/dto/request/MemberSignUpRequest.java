@@ -1,25 +1,24 @@
 package com.example.injerecipe.dto.request;
 
-import com.example.injerecipe.dto.Role;
-import com.example.injerecipe.dto.SocialType;
-import lombok.Data;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@Data
+@Getter
+@NoArgsConstructor
 public class MemberSignUpRequest {
 
-    private String name;
+    @Schema(description = "아이디", example = "test1234")
+    private String account;
 
-    private String email;
-
+    @Schema(description = "비밀번호", example = "test1234")
     private String password;
 
-    private String provider;
-
+    @Schema(description = "닉네임", example = "윈터")
     private String nickname;
 
-    private String refreshToken;
+    @Schema(description = "나이", example = "25")
 
     private int age;
 

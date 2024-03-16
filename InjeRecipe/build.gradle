@@ -22,7 +22,9 @@ repositories {
 }
 
 dependencies {
-    //implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.16.1'
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
@@ -38,7 +40,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
     // Mongodb
-    implementation ('org.springframework.boot:spring-boot-starter-data-mongodb')
+    //implementation ('org.springframework.boot:spring-boot-starter-data-mongodb')
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.23'
 
     // Swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
