@@ -1,8 +1,8 @@
 package com.example.injerecipe.controller;
 
 import com.example.injerecipe.dto.ApiResponse;
-import com.example.injerecipe.entity.Member;
-import com.example.injerecipe.service.OAuthService;
+import com.example.injerecipe.dto.request.MemberSignUpRequest;
+import com.example.injerecipe.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @Tag(name = "OAuth API")
@@ -18,7 +19,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class OAuthController {
 
-    private final OAuthService oAuthService;
+    private final MemberService memberService;
 
     @Operation(summary = "유저 정보")
     @GetMapping("/loginInfo")
@@ -29,10 +30,11 @@ public class OAuthController {
         return attributes.toString();
     }
 
-    @Operation(summary = "멤버 정보 저장")
+    @Operation(summary = "소셜 멤버 정보 저장")
     @PostMapping("/signUp")
-    public ApiResponse oauthSignUp(@RequestBody Member member){
-        return ApiResponse.success(oAuthService.saverUser(member));
+    public String oauthSignUp(@RequestBody MemberSignUpRequest request)throws Exception {
+        memberService.signUp(request);
+        return "회원가입 성공 !";
 
     }
 }
