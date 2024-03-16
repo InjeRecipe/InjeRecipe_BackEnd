@@ -55,10 +55,14 @@ public class SecurityConfig {
             "/upload",
             "/oauth/signUp",
             "/api/*",
-            "/api/search/*",
+
             "/register",
-            "/signUp",
+            "/member/signUp"
+
+            "/api/search/*",
+
             "/refrigerator/*"
+
     };
 
     @Bean
