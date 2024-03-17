@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RecipeBoardRepository extends JpaRepository<RecipeBoard, Long> {
     List<RecipeBoard> findByRecipeNmContaining(String keyword);
+    List<RecipeBoard> findAllByMemberId(Long id);
 }

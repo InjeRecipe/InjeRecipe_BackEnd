@@ -36,4 +36,10 @@ public class RecipeBoardController {
     public ApiResponse searchRecipe(@RequestBody RecipeSearchRequest request) {
         return ApiResponse.success(recipeBoardService.searchRecipe(request));
     }
+
+    @Operation(summary = "멤버별 레시피 전체 조회")
+    @PostMapping("/posts")
+    public ApiResponse getPosts(@AuthenticationPrincipal User user){
+        return ApiResponse.success(recipeBoardService.getPosts(new Long(user.getUsername())));
+    }
 }
