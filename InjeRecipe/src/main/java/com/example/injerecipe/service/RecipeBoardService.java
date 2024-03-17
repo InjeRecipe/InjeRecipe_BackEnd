@@ -62,6 +62,19 @@ public class RecipeBoardService {
         return recipeBoardRepository.save(recipeBoard.build());
     }
 
+    @Transactional
+    public List<RecipeBoardSearchResponse> getPosts(Long id){
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
+        List<RecipeBoard> recipeBoardList = recipeBoardRepository.findAllByMemberId(id);
+        List<RecipeBoardSearchResponse> responseList = new ArrayList<>();
+        for (RecipeBoard board : recipeBoardList) {
+            responseList.add(RecipeBoardSearchResponse.from(board));
+        }
+
+        return responseList;
+    }
+
     private List<String> uploadImagesToS3(List<MultipartFile> images) throws IOException {
         List<String> imageUrls = new ArrayList<>();
 
