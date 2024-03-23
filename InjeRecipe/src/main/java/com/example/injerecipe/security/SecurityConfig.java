@@ -37,7 +37,8 @@ public class SecurityConfig {
     private final JwtService jwtService;
     private final MemberRepository memberRepository;
     private final ObjectMapper objectMapper;
-    private final String[] allowedUrls = {"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**", "/v3/api-docs/**", "/swagger-ui/**", "/weather/get", "/openai/chat", "/upload", "/oauth/signUp", "/api/*", "/register", "/member/signUp", "/api/search/*", "/refrigerator/*"};
+    private final String[] allowedUrls = {"/v2/api-docs", "/swagger-resources", "/swagger-resources/**", "/configuration/ui", "/configuration/security", "/swagger-ui.html", "/webjars/**",
+            "/v3/api-docs/**", "/swagger-ui/**", "/weather/get", "/openai/chat", "/upload", "/oauth/signUp", "/api/*", "/register", "/member/signUp", "/api/search/*", "/refrigerator/*", "/image/upload"};
 
 
     @Bean

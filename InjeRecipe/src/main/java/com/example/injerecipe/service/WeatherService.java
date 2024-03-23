@@ -1,5 +1,6 @@
 package com.example.injerecipe.service;
 
+import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -16,11 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class WeatherService {
     @Value("${openweathermap.key}")
     private String apiKey;
 
-    @Transactional
+
     public String getWeatherString(String lat, String lon){
         String apiUrl = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon +"&appid=" + apiKey;
         try{
@@ -48,7 +51,7 @@ public class WeatherService {
         }
     }
 
-    @Transactional
+
     public Map<String, Object> parseWeather(String jsonString){
         JSONParser jsonParser = new JSONParser();
         JSONObject jsonObject;

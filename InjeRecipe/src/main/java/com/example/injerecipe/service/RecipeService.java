@@ -29,6 +29,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RecipeService {
     @Value("${openApi.recipe.serviceKey}")
@@ -40,7 +41,7 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
 
 
-    @Transactional
+
     public List<RecipeSearchResponse> searchRecipes(RecipeSearchRequest request) {
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
 
@@ -60,7 +61,7 @@ public class RecipeService {
         return searchResponses;
     }
 
-    @Transactional
+
     public List<RecipeSearchResponse> searchRecipe(RecipeSearchRequest request) {
         List<Recipe> recipeList = recipeRepository.findByRecipeNmContaining(request.getKeyword1());
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
@@ -80,7 +81,7 @@ public class RecipeService {
         }
     }
 
-    @Transactional
+
     public String getRecipe(int start, int end) throws ParseException {
         HttpURLConnection urlConnection = null;
         InputStream stream = null;

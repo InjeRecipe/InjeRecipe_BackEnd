@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RecipeBoardService {
 
@@ -38,7 +39,7 @@ public class RecipeBoardService {
     private final AmazonS3Service amazonS3Service;
 
 
-    @Transactional
+
     public RecipeBoard registerRecipe(RecipeBoardRequest request, Long id) throws IOException {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
@@ -62,7 +63,7 @@ public class RecipeBoardService {
         return recipeBoardRepository.save(recipeBoard.build());
     }
 
-    @Transactional
+
     public List<RecipeBoardSearchResponse> getPosts(Long id){
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
@@ -87,7 +88,7 @@ public class RecipeBoardService {
         return imageUrls;
     }
 
-    @Transactional
+
     public List<RecipeBoardSearchResponse> searchRecipes(RecipeSearchRequest request) {
         List<RecipeBoardSearchResponse> searchResponses = new ArrayList<>();
 
@@ -104,7 +105,7 @@ public class RecipeBoardService {
         return searchResponses;
     }
 
-    @Transactional
+
     public List<RecipeBoardSearchResponse> searchRecipe(RecipeSearchRequest request) {
         List<RecipeBoard> recipeList = recipeBoardRepository.findByRecipeNmContaining(request.getKeyword1());
         List<RecipeBoardSearchResponse> searchResponses = new ArrayList<>();

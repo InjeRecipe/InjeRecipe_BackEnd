@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class RefrigeratorService {
     private final RefrigeratorItemRepository refrigeratorItemRepository;
@@ -28,7 +29,7 @@ public class RefrigeratorService {
     private String notExist = "계정이 존재하지 않습니다.";
 
 
-    @Transactional
+
     public SuccessResponse addIngredientToRefrigerator(RefrigeratorRequest refrigeratorRequest, Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
@@ -43,7 +44,7 @@ public class RefrigeratorService {
         return SuccessResponse.of(HttpStatus.OK, "성공!");
     }
 
-    @Transactional
+
     public List<RefrigeratorResponse> getItem(IngredientsRequest request){
         Member loginUser = memberRepository.findByAccount(request.getAccount()).orElseThrow(() -> new UsernameNotFoundException(notExist));
         List<RefrigeratorItem> itemList = refrigeratorItemRepository.findByMember(loginUser);
