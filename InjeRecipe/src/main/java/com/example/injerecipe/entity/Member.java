@@ -2,21 +2,28 @@ package com.example.injerecipe.entity;
 
 import com.example.injerecipe.dto.Role;
 import com.example.injerecipe.dto.SocialType;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collection;
+import java.util.List;
 
+
+@Entity
 @Getter
 @Builder
-@Document(collection = "member")
+@Table
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Member {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "member_id")
+    private Long id;
+
+    private String account;
 
     private String name;
 
@@ -32,13 +39,19 @@ public class Member {
 
     private int age;
 
+    @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
     private SocialType socialType;
 
     private String socialId;
 
     private String imageUrl;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    private List<RecipeBoard> boards;
+
 
     public void authorizeUser() {
         this.role = Role.USER;
@@ -63,7 +76,7 @@ public class Member {
 
 
 
-    public Member(String id, String name, String email, String provider, String nickname){
+    public Member(Long id, String name, String email, String provider, String nickname){
         this.id = id;
         this.name = name;
         this.email = email;
@@ -71,7 +84,7 @@ public class Member {
         this.nickname = nickname;
     }
 
-    public static Member from(String id, String name, String email, String provider, String nickname){
+    public static Member from(Long id, String name, String email, String provider, String nickname){
         return Member.builder()
                 .id(id)
                 .name(name)
