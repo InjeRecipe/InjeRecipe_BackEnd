@@ -1,15 +1,16 @@
 package com.example.injerecipe.service;
 
+import com.example.injerecipe.dto.request.ImageSearchRequest;
 import com.example.injerecipe.dto.request.ImageUploadRequest;
 import com.example.injerecipe.dto.response.ImageUploadResponse;
-import com.example.injerecipe.entity.Image;
-import com.example.injerecipe.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -18,12 +19,15 @@ import java.util.UUID;
 public class ImageService {
     private final AmazonS3Service amazonS3Service;
 
-    private final ImageRepository imageRepository;
 
     public ImageUploadResponse registerImage(ImageUploadRequest request)throws IOException{
         String imageUrl = uploadImagesToS3(request.getImage());
-        imageRepository.save(Image.from(request.getName(), imageUrl));
         return ImageUploadResponse.from(request.getName(), imageUrl);
+    }
+
+    public List<String> searchImage(ImageSearchRequest request){
+        List<String> url = amazonS3Service.getImageUrlsWithKeyword(request.getName());
+        return url;
     }
 
     private String uploadImagesToS3(MultipartFile image) throws IOException {

@@ -3,7 +3,9 @@ package com.example.injerecipe.controller;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.example.injerecipe.dto.ApiResponse;
+import com.example.injerecipe.dto.request.ImageSearchRequest;
 import com.example.injerecipe.dto.request.ImageUploadRequest;
+import com.example.injerecipe.dto.request.RecipeSearchRequest;
 import com.example.injerecipe.service.ImageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,5 +31,13 @@ public class FileUploadController {
     @PostMapping(name = "/upload", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE, MediaType.APPLICATION_JSON_VALUE})
     public ApiResponse uploadFile(@ModelAttribute ImageUploadRequest request)throws IOException{
         return ApiResponse.success(imageService.registerImage(request));
+    }
+
+
+
+    @Operation(summary = "이미지 검색")
+    @PostMapping("/search")
+    public ApiResponse searchRecipe(@RequestBody ImageSearchRequest request) {
+        return ApiResponse.success(imageService.searchImage(request));
     }
 }
