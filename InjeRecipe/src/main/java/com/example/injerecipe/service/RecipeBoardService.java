@@ -89,41 +89,47 @@ public class RecipeBoardService {
     }
 
 
-    public List<RecipeBoardSearchResponse> searchRecipes(RecipeSearchRequest request) {
-        List<RecipeBoardSearchResponse> searchResponses = new ArrayList<>();
+    public List<RecipeSearchResponse> searchRecipes(RecipeSearchRequest request) {
+        List<RecipeSearchResponse> searchResponses = new ArrayList<>();
 
-        for (int i = 1; i <= 8; i++) {
-            String keyword = (String) invokeMethod(request, "getKeyword" + i);
+        List<String> keywords = request.getKeywords();
+        List<String> url = amazonS3Service.getImageUrlsWithKeyword("default");
+        for (String keyword : keywords) {
             if (keyword != null) {
-                List<RecipeBoard> recipes = recipeBoardRepository.findByRecipeNmContaining(keyword);
+                List<RecipeBoard> recipes = recipeBoardRepository.findByRecipeNmContainingKeyword(keyword);
                 if (!recipes.isEmpty()) {
-                    searchResponses.add(RecipeBoardSearchResponse.from(recipes.get(0)));
+                    searchResponses.add(RecipeSearchResponse.from(recipes.get(0)));
+                } else {
+                    searchResponses.add(RecipeSearchResponse.builder()
+                            .recipeNm(keyword)
+                            .recipeImages(amazonS3Service.getImageUrlsWithKeyword("default"))
+                            .errorMessage("해당 레시피를 추가해주세요.")
+                            .build());
                 }
             }
         }
-
         return searchResponses;
     }
 
 
-    public List<RecipeBoardSearchResponse> searchRecipe(RecipeSearchRequest request) {
-        List<RecipeBoard> recipeList = recipeBoardRepository.findByRecipeNmContaining(request.getKeyword1());
-        List<RecipeBoardSearchResponse> searchResponses = new ArrayList<>();
-        for(RecipeBoard recipe : recipeList){
-            searchResponses.add(RecipeBoardSearchResponse.from(recipe));
-        }
 
+    public List<RecipeSearchResponse> searchRecipe(RecipeSearchRequest request) {
+        List<RecipeBoard> recipeList = recipeBoardRepository.findByRecipeNmContainingKeyword(request.getKeywords().get(0));
+        List<RecipeSearchResponse> searchResponses = new ArrayList<>();
+        if(!searchResponses.isEmpty()) {
+            for (RecipeBoard recipe : recipeList) {
+                searchResponses.add(RecipeSearchResponse.from(recipe));
+            }
+        }
+        else{
+            searchResponses.add(RecipeSearchResponse.builder()
+                    .recipeNm(request.getKeywords().get(0))
+                    .recipeImages(amazonS3Service.getImageUrlsWithKeyword("default"))
+                    .errorMessage("해당 레시피를 추가해주세요.")
+                    .build());
+        }
         return searchResponses;
     }
 
 
-    private Object invokeMethod(Object obj, String methodName) {
-        try {
-            Method method = obj.getClass().getMethod(methodName);
-            return method.invoke(obj);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-            // 메서드가 없거나 호출할 수 없는 경우 null 반환
-            return null;
-        }
-    }
 }
