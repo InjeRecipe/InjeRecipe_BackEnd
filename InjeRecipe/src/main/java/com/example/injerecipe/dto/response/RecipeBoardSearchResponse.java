@@ -10,6 +10,8 @@ import java.util.List;
 @Data
 @Builder
 public class RecipeBoardSearchResponse {
+    private String userName;
+
     private String recipeSeq;
 
     private String recipeNm;
@@ -27,8 +29,9 @@ public class RecipeBoardSearchResponse {
     private List<String> recipeImages;
     private List<String> recipeManuals;
 
-    public static RecipeBoardSearchResponse from(RecipeBoard recipe){
+    public static RecipeBoardSearchResponse from(RecipeBoard recipe, String userName){
         return RecipeBoardSearchResponse.builder()
+                .userName(userName)
                 .recipeSeq(recipe.getRecipeSeq())
                 .recipeNm(recipe.getRecipeNm())
                 .recipeWay(recipe.getRecipeWay())

@@ -25,6 +25,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -37,7 +38,6 @@ public class RecipeBoardService {
     private final MemberRepository memberRepository;
 
     private final AmazonS3Service amazonS3Service;
-
 
 
     public RecipeBoard registerRecipe(RecipeBoardRequest request, Long id) throws IOException {
@@ -67,16 +67,31 @@ public class RecipeBoardService {
     }
 
 
-    public List<RecipeBoardSearchResponse> getPosts(Long id){
+    public List<RecipeBoardSearchResponse> getMemberPosts(Long id){
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
         List<RecipeBoard> recipeBoardList = recipeBoardRepository.findAllByMemberId(id);
         List<RecipeBoardSearchResponse> responseList = new ArrayList<>();
+
         for (RecipeBoard board : recipeBoardList) {
-            responseList.add(RecipeBoardSearchResponse.from(board));
+            responseList.add(RecipeBoardSearchResponse.from(board, member.getNickname()));
         }
 
         return responseList;
+    }
+
+    public List<RecipeBoardSearchResponse> getPosts() {
+
+        List<RecipeBoard> boardList = recipeBoardRepository.findAllByOrderByLastModifiedAtDesc();
+        List<RecipeBoardSearchResponse> responseDtoList = new ArrayList<>();
+
+        for (RecipeBoard board : boardList) {
+            Member member = memberRepository.findById(board.getMember().getId())
+                    .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
+            responseDtoList.add(RecipeBoardSearchResponse.from(board, member.getNickname()));
+        }
+
+        return responseDtoList;
     }
 
     private List<String> uploadImagesToS3(List<MultipartFile> images) throws IOException {

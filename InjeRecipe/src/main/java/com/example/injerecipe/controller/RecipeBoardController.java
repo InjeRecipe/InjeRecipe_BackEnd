@@ -38,8 +38,13 @@ public class RecipeBoardController {
     }
 
     @Operation(summary = "멤버별 레시피 전체 조회")
+    @PostMapping("/member/posts")
+    public ApiResponse getMemberPosts(@AuthenticationPrincipal User user){
+        return ApiResponse.success(recipeBoardService.getMemberPosts(new Long(user.getUsername())));
+    }
+    @Operation(summary = "작성된 전체 레시피 조회")
     @PostMapping("/posts")
     public ApiResponse getPosts(@AuthenticationPrincipal User user){
-        return ApiResponse.success(recipeBoardService.getPosts(new Long(user.getUsername())));
+        return ApiResponse.success(recipeBoardService.getMemberPosts(new Long(user.getUsername())));
     }
 }
