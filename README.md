@@ -27,6 +27,7 @@
 - Spring Data JPA
 - PostgreSQL 11.2
 - OAuth 2.0
+- Amazon S3
 
 
 
