@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,8 +26,12 @@ public class ImageService {
         return ImageUploadResponse.from(request.getName(), imageUrl);
     }
 
-    public List<String> searchImage(ImageSearchRequest request){
-        List<String> url = amazonS3Service.getImageUrlsWithKeyword(request.getName());
+    public List<List<String>> searchImage(ImageSearchRequest request){
+        List<String> nameList = request.getName();
+        List<List<String>> url = new ArrayList<>();
+        for(String name: nameList) {
+            url.add(amazonS3Service.getImageUrlsWithKeyword(name));
+        }
         return url;
     }
 
