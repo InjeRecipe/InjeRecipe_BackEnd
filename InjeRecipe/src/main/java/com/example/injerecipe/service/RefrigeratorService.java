@@ -33,21 +33,18 @@ public class RefrigeratorService {
     public SuccessResponse addIngredientToRefrigerator(RefrigeratorRequest refrigeratorRequest, Long id) {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
-        Optional<RefrigeratorItem> item = refrigeratorItemRepository.findByIngredient(refrigeratorRequest.ingredient());
-        if(item.isEmpty())
-            refrigeratorItemRepository.save(RefrigeratorItem.from(member, refrigeratorRequest.ingredient()));
-        else{
-            refrigeratorItemRepository.delete(item.get());
-            refrigeratorItemRepository.flush();
+        List<String> ingredients = refrigeratorRequest.ingredient();
+        for(String ingredient: ingredients) {
+            Optional<RefrigeratorItem> item = refrigeratorItemRepository.findByIngredient(ingredient);
+                refrigeratorItemRepository.save(RefrigeratorItem.from(member, ingredient));
         }
-        System.out.println("----------------");
         return SuccessResponse.of(HttpStatus.OK, "성공!");
     }
 
-
-    public List<RefrigeratorResponse> getItem(IngredientsRequest request){
-        Member loginUser = memberRepository.findByAccount(request.getAccount()).orElseThrow(() -> new UsernameNotFoundException(notExist));
-        List<RefrigeratorItem> itemList = refrigeratorItemRepository.findByMember(loginUser);
+    public List<RefrigeratorResponse> getItem(Long id){
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
+        List<RefrigeratorItem> itemList = refrigeratorItemRepository.findByMember(member);
         List<RefrigeratorResponse> responseList = new ArrayList<>();
         for(RefrigeratorItem item : itemList){
             responseList.add(RefrigeratorResponse.from(item));
