@@ -13,4 +13,6 @@ public interface RecipeBoardRepository extends JpaRepository<RecipeBoard, Long> 
     @Query("SELECT r FROM RecipeBoard r WHERE LOWER(r.recipeNm) LIKE LOWER(CONCAT('%', :keyword, '%'))")
     List<RecipeBoard> findByRecipeNmContainingKeyword(@Param("keyword") String keyword);
     List<RecipeBoard> findAllByMemberId(Long id);
+
+    List<RecipeBoard> findAllByOrderByLastModifiedAtDesc();
 }
