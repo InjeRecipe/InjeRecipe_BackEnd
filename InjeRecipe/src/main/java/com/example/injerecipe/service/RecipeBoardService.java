@@ -111,16 +111,18 @@ public class RecipeBoardService {
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
 
         List<String> keywords = request.getKeywords();
-        List<String> url = amazonS3Service.getImageUrlsWithKeyword("default");
+        String url = amazonS3Service.getImageUrlsWithKeyword("default");
+        List<String> imageUrl = new ArrayList<>();
         for (String keyword : keywords) {
             if (keyword != null) {
                 List<RecipeBoard> recipes = recipeBoardRepository.findByRecipeNmContainingKeyword(keyword);
                 if (!recipes.isEmpty()) {
                     searchResponses.add(RecipeSearchResponse.from(recipes.get(0)));
                 } else {
+                    imageUrl.add(url);
                     searchResponses.add(RecipeSearchResponse.builder()
                             .recipeNm(keyword)
-                            .recipeImages(amazonS3Service.getImageUrlsWithKeyword("default"))
+                            .recipeImages(imageUrl)
                             .errorMessage("해당 레시피를 추가해주세요.")
                             .build());
                 }
@@ -134,15 +136,18 @@ public class RecipeBoardService {
     public List<RecipeSearchResponse> searchRecipe(RecipeSearchRequest request) {
         List<RecipeBoard> recipeList = recipeBoardRepository.findByRecipeNmContainingKeyword(request.getKeywords().get(0));
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
+        String url = amazonS3Service.getImageUrlsWithKeyword("default");
+        List<String> imageUrl = new ArrayList<>();
         if(!searchResponses.isEmpty()) {
             for (RecipeBoard recipe : recipeList) {
                 searchResponses.add(RecipeSearchResponse.from(recipe));
             }
         }
         else{
+            imageUrl.add(url);
             searchResponses.add(RecipeSearchResponse.builder()
                     .recipeNm(request.getKeywords().get(0))
-                    .recipeImages(amazonS3Service.getImageUrlsWithKeyword("default"))
+                    .recipeImages(imageUrl)
                     .errorMessage("해당 레시피를 추가해주세요.")
                     .build());
         }
