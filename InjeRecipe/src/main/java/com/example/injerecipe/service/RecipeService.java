@@ -72,7 +72,7 @@ public class RecipeService {
         List<Recipe> recipeList = recipeRepository.findByRecipeNmContainingKeyword(request.getKeywords().get(0));
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
 
-        if(!searchResponses.isEmpty()) {
+        if(!recipeList.isEmpty()) {
             for (Recipe recipe : recipeList) {
                 searchResponses.add(RecipeSearchResponse.from(recipe));
             }
