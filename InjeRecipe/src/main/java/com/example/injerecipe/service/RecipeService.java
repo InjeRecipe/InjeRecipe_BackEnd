@@ -48,8 +48,7 @@ public class RecipeService {
     public List<RecipeSearchResponse> searchRecipes(RecipeSearchRequest request) {
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
         List<String> keywords = request.getKeywords();
-        String url = amazonS3Service.getImageUrlsWithKeyword("default");
-        List<String> imageUrl = new ArrayList<>();
+
         for (String keyword : keywords) {
             if (keyword != null) {
                 List<Recipe> recipes = recipeRepository.findByRecipeNmContainingKeyword(keyword);
@@ -57,10 +56,9 @@ public class RecipeService {
                 if (!recipes.isEmpty()) {
                     searchResponses.add(RecipeSearchResponse.from(recipes.get(0)));
                 } else {
-                    imageUrl.add(url);
+
                     searchResponses.add(RecipeSearchResponse.builder()
                             .recipeNm(keyword)
-                            .recipeImages(imageUrl)
                             .errorMessage("해당 레시피를 추가해주세요.")
                             .build());
                 }
@@ -73,17 +71,15 @@ public class RecipeService {
     public List<RecipeSearchResponse> searchRecipe(RecipeSearchRequest request) {
         List<Recipe> recipeList = recipeRepository.findByRecipeNmContainingKeyword(request.getKeywords().get(0));
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
-        String url = amazonS3Service.getImageUrlsWithKeyword("default");
-        List<String> imageUrl = new ArrayList<>();
+
         if(!searchResponses.isEmpty()) {
             for (Recipe recipe : recipeList) {
                 searchResponses.add(RecipeSearchResponse.from(recipe));
             }
         }else{
-            imageUrl.add(url);
+
             searchResponses.add(RecipeSearchResponse.builder()
                     .recipeNm(request.getKeywords().get(0))
-                    .recipeImages(imageUrl)
                     .errorMessage("해당 레시피를 추가해주세요.")
                     .build());
         }
