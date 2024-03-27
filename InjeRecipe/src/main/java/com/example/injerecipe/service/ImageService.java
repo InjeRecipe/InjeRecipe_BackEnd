@@ -26,9 +26,9 @@ public class ImageService {
         return ImageUploadResponse.from(request.getName(), imageUrl);
     }
 
-    public List<List<String>> searchImage(ImageSearchRequest request){
+    public List<String> searchImage(ImageSearchRequest request){
         List<String> nameList = request.getName();
-        List<List<String>> url = new ArrayList<>();
+        List<String> url = new ArrayList<>();
         for(String name: nameList) {
             url.add(amazonS3Service.getImageUrlsWithKeyword(name));
         }

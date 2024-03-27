@@ -41,7 +41,7 @@ public class AmazonS3Service {
         }
     }
 
-    public List<String> getImageUrlsWithKeyword(String keyword) {
+    public String getImageUrlsWithKeyword(String keyword) {
         List<String> imageUrls = new ArrayList<>();
 
         ListObjectsV2Request request = new ListObjectsV2Request()
@@ -61,8 +61,8 @@ public class AmazonS3Service {
             }
             request.setContinuationToken(result.getNextContinuationToken());
         } while (result.isTruncated());
-
-        return imageUrls;
+        String imageUrl = imageUrls.get(0);
+        return imageUrl;
     }
 }
 
