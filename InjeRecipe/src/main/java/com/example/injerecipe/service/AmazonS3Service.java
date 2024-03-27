@@ -43,7 +43,7 @@ public class AmazonS3Service {
 
     public String getImageUrlsWithKeyword(String keyword) {
         List<String> imageUrls = new ArrayList<>();
-
+        String url = "";
         ListObjectsV2Request request = new ListObjectsV2Request()
                 .withBucketName(bucketName)
                 .withPrefix(""); // 모든 객체를 검색하려면 prefix를 비워둡니다.
@@ -61,8 +61,11 @@ public class AmazonS3Service {
             }
             request.setContinuationToken(result.getNextContinuationToken());
         } while (result.isTruncated());
-        String imageUrl = imageUrls.get(0);
-        return imageUrl;
+        if(!imageUrls.isEmpty()) url = imageUrls.get(0);
+        else{
+            return null;
+        }
+        return url;
     }
 }
 
