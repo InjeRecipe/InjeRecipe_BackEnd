@@ -20,10 +20,14 @@ import java.util.UUID;
 public class ImageService {
     private final AmazonS3Service amazonS3Service;
 
-
     public ImageUploadResponse registerImage(ImageUploadRequest request)throws IOException{
-        String imageUrl = uploadImagesToS3(request.getImage());
-        return ImageUploadResponse.from(request.getName(), imageUrl);
+        List<MultipartFile> imageList = request.getImage();
+        List<String> imageUrls = new ArrayList<>();
+        for(MultipartFile image: imageList) {
+            String imageUrl = uploadImagesToS3(image);
+            imageUrls.add(imageUrl);
+        }
+        return ImageUploadResponse.from(imageUrls);
     }
 
     public List<String> searchImage(ImageSearchRequest request){
@@ -34,7 +38,6 @@ public class ImageService {
         }
         return url;
     }
-
     private String uploadImagesToS3(MultipartFile image) throws IOException {
         String fileName = UUID.randomUUID().toString() + "_" + image.getOriginalFilename();
         String imageUrl = amazonS3Service.uploadImage(image, fileName);

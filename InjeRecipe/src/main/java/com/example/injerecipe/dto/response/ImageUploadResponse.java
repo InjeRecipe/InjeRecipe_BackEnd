@@ -5,16 +5,16 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @Builder
 public class ImageUploadResponse {
-    private String name;
-    private String imageUrl;
+    private List<String> imageUrl;
 
-    public static ImageUploadResponse from(String name, String imageUrl){
+    public static ImageUploadResponse from(List<String> imageUrls){
         return ImageUploadResponse.builder()
-                .name(name)
-                .imageUrl(imageUrl)
+                .imageUrl(imageUrls)
                 .build();
     }
 }
