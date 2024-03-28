@@ -44,7 +44,6 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
 
 
-
     public List<RecipeSearchResponse> searchRecipes(RecipeSearchRequest request) {
         List<RecipeSearchResponse> searchResponses = new ArrayList<>();
         List<String> keywords = request.getKeywords();
@@ -119,10 +118,8 @@ public class RecipeService {
         JSONObject jsonCook = (JSONObject) jsonObject.get("COOKRCP01");
         JSONArray jsonArray = (JSONArray) jsonCook.get("row");
         for(int i = 0; i<jsonArray.size(); i++) {
-
             JSONObject jsonRow = (JSONObject) jsonArray.get(i);
             recipeRepository.save(makeDto(jsonRow));
-
         }
         return result;
     }
