@@ -39,8 +39,6 @@ public class RecipeService {
     @Value("${openApi.dataType}")
     private String dataType;
 
-    private final AmazonS3Service amazonS3Service;
-
     private final RecipeRepository recipeRepository;
 
 
