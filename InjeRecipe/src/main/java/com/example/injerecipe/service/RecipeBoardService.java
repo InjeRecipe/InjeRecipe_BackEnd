@@ -44,9 +44,11 @@ public class RecipeBoardService {
         Member member = memberRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("해당 이메일이 존재하지 않습니다."));
 
+        List<MultipartFile> list = new ArrayList<>();
+        list.add(request.getRecipeFileS());
         // 이미지 업로드 및 URL 생성
         List<String> recipeImageUrls = uploadImagesToS3(request.getRecipeImages());
-        List<String> imageUrls = uploadImagesToS3(request.getRecipeImages());
+        List<String> imageUrls = uploadImagesToS3(list);
 
 
 
