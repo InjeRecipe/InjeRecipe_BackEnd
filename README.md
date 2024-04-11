@@ -1,10 +1,11 @@
 # InjeRecipe
 사용자들이 원하는 음식 레시피를 제공해주는 프로젝트이다. 직접 레시피를 업로드 할 수도 있고, 날씨에 따른 레시피 추천, 나만의 냉장고 등이 가능하다.
 <div align="center">
-  <img src="https://github.com/InjeRecipe/InjeRecipe_BackEnd/assets/50660440/9b4ff414-dca8-454b-8226-06e1415aa331", width=300, height = 300>
+<img alt="injeRecipePoster" src="https://github.com/InjeRecipe/InjeRecipe_BackEnd/assets/50660458/fc70a177-ba18-47ce-b1d9-c76ca04e200f">
   
 [![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2FInjeRecipe%2FInjeRecipe_BackEnd.git&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
 </div>
+
 
 
 
