@@ -1,0 +1,6 @@
+
+E	java:S106."+Replace this use of System.out by a logger.(ÔÿÃûÿÿÿÿ
+C
+java:S1481k"(Remove this unused "obj" local variable.(›·Ù­ıÿÿÿÿ
+U
+java:S4719ˆ"9Replace charset name argument with StandardCharsets.UTF_8(Ê¾Ö˜úÿÿÿÿ
