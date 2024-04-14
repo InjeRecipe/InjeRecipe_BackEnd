@@ -1,0 +1,9 @@
+
+^
+java:S1192s"HDefine a constant instead of duplicating this literal "default" 3 times.(ÅÔŠ
+…
+java:S1192-"oDefine a constant instead of duplicating this literal "í•´ë‹¹ ì´ë©”ì¼ì´ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤." 3 times.(¦ ú©
+M
+java:S1854s"7Remove this useless assignment to local variable "url".(ÅÔŠ
+>
+java:S1481s"(Remove this unused "url" local variable.(ÅÔŠ
