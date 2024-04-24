@@ -26,6 +26,7 @@
 - Java 17
 - Spring Boot 3.0.9
 - Spring Data JPA
+- Spring Security
 - PostgreSQL 11.2
 - OAuth 2.0
 - Amazon S3
