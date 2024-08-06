@@ -8,7 +8,6 @@
 
 
 
-
 ## 개발팀 소개
 
 <div align = "center">
